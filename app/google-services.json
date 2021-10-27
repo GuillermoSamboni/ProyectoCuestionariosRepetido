@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "700177577046",
+    "project_id": "proyectocuestionarios-33406",
+    "storage_bucket": "proyectocuestionarios-33406.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700177577046:android:3c21572588a21ae60037f7",
+        "android_client_info": {
+          "package_name": "com.cuestionarios.cuestionarioproyecto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700177577046-fsk6k5kvuqqbg55ndpje02olr2qbfj39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyzXdO1w1UVp0TmRlHtMAK19hloCNnAOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700177577046-fsk6k5kvuqqbg55ndpje02olr2qbfj39.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700177577046:android:9312ea53fb683a7c0037f7",
+        "android_client_info": {
+          "package_name": "com.proyectocuestionarios.cuestionarios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700177577046-fsk6k5kvuqqbg55ndpje02olr2qbfj39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyzXdO1w1UVp0TmRlHtMAK19hloCNnAOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700177577046-fsk6k5kvuqqbg55ndpje02olr2qbfj39.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
