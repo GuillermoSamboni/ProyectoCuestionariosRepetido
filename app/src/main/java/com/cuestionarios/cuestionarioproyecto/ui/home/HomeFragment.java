@@ -1,5 +1,7 @@
 package com.cuestionarios.cuestionarioproyecto.ui.home;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,6 +72,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
         return root;
     }
 
@@ -139,7 +142,6 @@ public class HomeFragment extends Fragment {
                             }
                             Log.d("LilstaFinal", String.valueOf(listaFinal.size()));
 
-
                             Map<String, Object> city = new HashMap<>();
                             city.put("nombre", "NombreCuestionario");
                             city.put("correo", "correo@gmail.com");
@@ -202,6 +204,7 @@ public class HomeFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(requireContext(), "No se pudo obetener la lista de cuestionarios", Toast.LENGTH_SHORT).show();
 
 
             }

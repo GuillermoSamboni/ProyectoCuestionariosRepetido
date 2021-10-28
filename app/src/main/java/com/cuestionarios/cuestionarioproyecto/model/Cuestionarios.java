@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Cuestionarios {
     private String id;
-    private ArrayList<Preguntas> pregunta = new ArrayList();
+    private ArrayList<Preguntas> pregunta = new ArrayList<Preguntas>();
     private String fecha = "";
     private String nombre = "";
     private String correo = "";
-    private ArrayList<String> respuestas = new ArrayList();
+    private ArrayList<String> respuestas = new ArrayList<String>();
 
     public Cuestionarios() {
     }

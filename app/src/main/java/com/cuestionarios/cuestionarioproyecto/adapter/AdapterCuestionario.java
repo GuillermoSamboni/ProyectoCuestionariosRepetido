@@ -1,6 +1,8 @@
 package com.cuestionarios.cuestionarioproyecto.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,7 +65,15 @@ public class AdapterCuestionario extends RecyclerView.Adapter<AdapterCuestionari
 
                 Intent intentDetail=new Intent(context, CuestionarioActivity.class);
                 intentDetail.putExtra("id_cuestionario",cuestionarios.get(position).getId());
+
                 context.startActivity(intentDetail);
+
+            }
+        });
+        holder.btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calcularResultado(cuestionarios.get(position));
             }
         });
     }
@@ -94,6 +104,39 @@ public class AdapterCuestionario extends RecyclerView.Adapter<AdapterCuestionari
             btnHistory=itemView.findViewById(R.id.idBtnHistory);
 
         }
+    }
+
+    private void calcularResultado(Cuestionarios c){
+        int buenas = 0;
+        int malas = 0;
+
+        if (!c.getRespuestas().get(0).equals("")) {
+            for (int i = 0; i < c.getPregunta().size(); i++) {
+                if (c.getPregunta().get(i).getRespuesta().equals(c.getRespuestas().get(i))) {
+                    buenas++;
+                } else {
+                    malas++;
+                }
+            }
+            //Calcular el puntaje de la prueba
+            float puntaje = (buenas * 100 ) / c.getPregunta().size();
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setTitle("Resultado de prueba");
+            alertDialog.setMessage("Buenas: "+buenas+ "\n"
+                    + "Malas: " + malas+ "\n"
+                    + "Puntaje: " + puntaje+ "%");
+            alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog.create().show();
+        } else {
+            Toast.makeText(context, "Debe realizar la prueba", Toast.LENGTH_SHORT).show();
+        }
+        
     }
 
 }

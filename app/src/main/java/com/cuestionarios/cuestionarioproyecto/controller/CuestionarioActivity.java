@@ -19,12 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cuestionarios.cuestionarioproyecto.HomeActivity;
 import com.cuestionarios.cuestionarioproyecto.R;
 import com.cuestionarios.cuestionarioproyecto.adapter.AdapterPregunta;
 import com.cuestionarios.cuestionarioproyecto.model.Cuestionarios;
 import com.cuestionarios.cuestionarioproyecto.model.Preguntas;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -97,6 +99,13 @@ public class CuestionarioActivity extends AppCompatActivity {
             }
         });
 
+        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarPrueba(idExtra);
+            }
+        });
+
     }
 
 
@@ -117,16 +126,11 @@ public class CuestionarioActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        //Mostrar las preguntas
-                        adapterPregunta.setPregunta(cuestionario.getPregunta());
-                        adapterPregunta.setContext(CuestionarioActivity.this);
-                        //Toast.makeText(context, "-->"+cuestionario.getPregunta().size(), Toast.LENGTH_SHORT).show();
-                        //idRecyclerPreguntas.setLayoutManager(new LinearLayoutManager(CuestionarioActivity.this));
-                        //idRecyclerPreguntas.setAdapter(adapterPregunta);
+
                         if (cuestionario.getPregunta().size() > 0) {
-                            setearPregunta(cuestionario.getPregunta().get(0),numPregunta);
+                            setearPregunta(cuestionario.getPregunta().get(0),0);
                         }
-                        //Toast.makeText(CuestionarioActivity.this, "-->"+adapterPregunta.getPreguntas().size(), Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -155,7 +159,6 @@ public class CuestionarioActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        numPregunta++;
 
                         if (cuestionario.getPregunta().size() > 0) {
                             if (numPregunta < cuestionario.getPregunta().size()) {
@@ -176,20 +179,28 @@ public class CuestionarioActivity extends AppCompatActivity {
                                 //Se valida si se puede continuar o debe seleccionar una respuesta
                                 if (continuar) {
                                     cuestionario.getRespuestas().set(numPregunta,respuesta);
-                                    Toast.makeText(CuestionarioActivity.this, cuestionario.getRespuestas().get(numPregunta), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(CuestionarioActivity.this, cuestionario.getRespuestas().get(numPregunta), Toast.LENGTH_SHORT).show();
 
-                                    // Update an existing document
-                                    DocumentReference docRef = db.collection("Cuetionarios").document(cuestionario.getId());
+                                    db.collection("Cuestionarios").document(cuestionario.getId()).update("respuestas",cuestionario.getRespuestas()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            numPregunta++;
+                                            setearPregunta(cuestionario.getPregunta().get(numPregunta), numPregunta);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull @NotNull Exception e) {
+                                            Toast.makeText(CuestionarioActivity.this, "No se ha podido actualizar la respuesta", Toast.LENGTH_SHORT).show();
+                                            numPregunta--;
+                                        }
+                                    })
+                                    ;
 
-                                    // (async) Update one field
-                                    docRef.update("respuestas", cuestionario.getRespuestas());
-
-
-                                    setearPregunta(cuestionario.getPregunta().get(numPregunta), numPregunta);
                                 } else {
                                     numPregunta--;
                                 }
-                                if (numPregunta == cuestionario.getPregunta().size()-1) {
+                                if (numPregunta == cuestionario.getPregunta().size()-2) {
                                     btnSiguiente.setVisibility(View.INVISIBLE);
                                     btnFinalizar.setVisibility(View.VISIBLE);
                                 }
@@ -205,6 +216,75 @@ public class CuestionarioActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void finalizarPrueba(String idCuestionario){
+        cuestionario = new Cuestionarios();
+        preguntas = new ArrayList<>();
+
+        db.collection("Cuestionarios").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        String respuesta = "";
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getId().equals(idCuestionario)) {
+                                    cuestionario = document.toObject(Cuestionarios.class);
+                                    cuestionario.setId(document.getId());
+                                }
+                            }
+                        }
+                        //Agregamos la respuesta
+                        Boolean continuar = true;
+                        if(opt1.isChecked()){
+                            respuesta = opt1.getText().toString();
+                        } else if (opt2.isChecked()){
+                            respuesta = opt1.getText().toString();
+                        } else if (opt3.isChecked()) {
+                            respuesta = opt1.getText().toString();
+                        } else if(opt4.isChecked()) {
+                            respuesta = opt1.getText().toString();
+                        } else {
+                            continuar = false;
+                            Toast.makeText(CuestionarioActivity.this, "Debes seleccionar una respuesta", Toast.LENGTH_SHORT).show();
+                        }
+                        //Se valida si se puede continuar o debe seleccionar una respuesta
+                        if (continuar) {
+                            cuestionario.getRespuestas().set(numPregunta,respuesta);
+                            //Toast.makeText(CuestionarioActivity.this, cuestionario.getRespuestas().get(numPregunta), Toast.LENGTH_SHORT).show();
+
+                            db.collection("Cuestionarios").document(cuestionario.getId()).update("respuestas",cuestionario.getRespuestas()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(CuestionarioActivity.this, "Cuestionario Finalizado", Toast.LENGTH_SHORT).show();
+                                    Intent intentDetail=new Intent(CuestionarioActivity.this, HomeActivity.class);
+                                    CuestionarioActivity.this.startActivity(intentDetail);
+                                }
+                            })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull @NotNull Exception e) {
+                                            Toast.makeText(CuestionarioActivity.this, "No se ha podido finalizar, intente de nuevo", Toast.LENGTH_SHORT).show();
+                                            numPregunta--;
+                                        }
+                                    })
+                            ;
+
+                        } else {
+                            numPregunta--;
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+
+                    }
+                });
+
+    }
+
     /*Agrega la información de una pregunta en los campos para que el usuario
     pueda visualizarla
     * */
