@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i <= 10; i++) {
             listaCuestionarios.add("cuestionario" + i + "cue1");
         }
-        adapterCuestionario = new AdapterCuestionario(listaCuestionarios);
+        //adapterCuestionario = new AdapterCuestionario(listaCuestionarios);
         binding.idRecyclerPreguntas.setAdapter(adapterCuestionario);
 
         binding.idBtnFloatGenerar.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
                             city.put("pregunta", listaFinal);
                             city.put("respuestas", listaRespuestas);
 
-                            db.collection("Cuestionarios").document("doc1").set(city)
+                            db.collection("Cuestionarios").document().set(city)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

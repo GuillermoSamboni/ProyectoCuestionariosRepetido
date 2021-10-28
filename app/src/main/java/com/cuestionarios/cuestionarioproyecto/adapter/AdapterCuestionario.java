@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cuestionarios.cuestionarioproyecto.R;
 import com.cuestionarios.cuestionarioproyecto.model.Cuestionarios;
+import com.cuestionarios.cuestionarioproyecto.model.Preguntas;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,12 +20,13 @@ import java.util.ArrayList;
 
 import kotlin.jvm.internal.markers.KMutableList;
 
-public class AdapterCuestionario extends RecyclerView.Adapter<AdapterCuestionario.ViewHolder> {
+public class AdapterCuestionario extends RecyclerView.Adapter<AdapterCuestionario.ViewHolder> implements View.OnClickListener {
 
-    private ArrayList<String> dataLis;
+    private ArrayList<Preguntas> preguntas = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public AdapterCuestionario(ArrayList<String> dataLis) {
-        this.dataLis = dataLis;
+    public void setProductos(ArrayList<Preguntas> list){
+        this.preguntas = list;
     }
 
 
@@ -32,18 +35,23 @@ public class AdapterCuestionario extends RecyclerView.Adapter<AdapterCuestionari
     @Override
     public AdapterCuestionario.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, null, false);
-
+        view.setOnClickListener(this);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterCuestionario.ViewHolder holder, int position) {
-        holder.asignarDatos(dataLis.get(position));
+
     }
 
     @Override
     public int getItemCount() {
-        return dataLis.size();
+        return preguntas.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
