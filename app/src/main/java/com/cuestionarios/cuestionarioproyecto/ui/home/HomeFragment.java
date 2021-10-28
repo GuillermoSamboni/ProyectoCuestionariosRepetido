@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cuestionarios.cuestionarioproyecto.adapter.AdapterCuestionario;
 import com.cuestionarios.cuestionarioproyecto.databinding.FragmentHomeBinding;
+import com.cuestionarios.cuestionarioproyecto.model.Cuestionarios;
 import com.cuestionarios.cuestionarioproyecto.model.Preguntas;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,11 +35,11 @@ import java.util.Random;
 public class HomeFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<Preguntas> listaPreguntasFiltrado = new ArrayList<>();
-
+    AdapterCuestionario adapterCuestionario = new AdapterCuestionario();
 
     private HomeViewModel homeViewModel;
+
     private FragmentHomeBinding binding;
-    ArrayList<String> listaCuestionarios;
 
     ArrayList<Preguntas> listaPreguntasMatematicas = new ArrayList<>();
     ArrayList<Preguntas> listaPreguntasLiteratura = new ArrayList<>();
@@ -50,9 +51,6 @@ public class HomeFragment extends Fragment {
 
     ArrayList<String> listaRespuestas = new ArrayList<>();
 
-    RecyclerView recyclerView;
-    AdapterCuestionario adapterCuestionario;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,20 +59,14 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.idRecyclerPreguntas.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-
-        listaCuestionarios = new ArrayList<String>();
-
-        for (int i = 0; i <= 10; i++) {
-            listaCuestionarios.add("cuestionario" + i + "cue1");
-        }
-        //adapterCuestionario = new AdapterCuestionario(listaCuestionarios);
-        binding.idRecyclerPreguntas.setAdapter(adapterCuestionario);
+        listarCuestionarios();
 
         binding.idBtnFloatGenerar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 obtenerPreguntasPorMateria();
+
             }
         });
 
@@ -141,6 +133,7 @@ public class HomeFragment extends Fragment {
                                 listaFinal.add(listaPreguntasIngles.get(valor));
 
                             }
+
                             for (int i = 0; i < listaFinal.size(); i++) {
                                 listaRespuestas.add("");
                             }
@@ -174,6 +167,47 @@ public class HomeFragment extends Fragment {
                 });
     }
 
+    /**
+     * listamos cuiestionarios
+     */
+    public void listarCuestionarios() {
+        ArrayList<Cuestionarios> listaCuestionarios = new ArrayList<>();
+
+        db.collection("Cuestionarios").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Cuestionarios cuestionario = document.toObject(Cuestionarios.class);
+                        if (cuestionario.getCorreo().equals("correo@gmail.com")) {
+                            cuestionario.setId(document.getId());
+                            listaCuestionarios.add(cuestionario);
+                            //Log.d("idDocument", document.getId());
+                        }
+                    }
+                    Log.d("CuestionarioLista", String.valueOf(listaCuestionarios.size()));
+                    LinearLayoutManager llm = new LinearLayoutManager(requireContext());
+                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+
+                    adapterCuestionario.setCuestionarios(listaCuestionarios);
+                    adapterCuestionario.setContext(getContext());
+                    binding.idRecyclerPreguntas.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    binding.idRecyclerPreguntas.setAdapter(adapterCuestionario);
+
+                } else {
+                    Toast.makeText(requireContext(), "No se pudo obetener la lista de cuestionarios", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+
+
+            }
+        });
+
+    }
 
     @Override
     public void onDestroyView() {

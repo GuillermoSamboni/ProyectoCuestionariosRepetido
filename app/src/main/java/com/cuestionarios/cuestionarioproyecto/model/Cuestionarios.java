@@ -3,49 +3,82 @@ package com.cuestionarios.cuestionarioproyecto.model;
 import java.util.ArrayList;
 
 public class Cuestionarios {
-    private ArrayList preguntas = new ArrayList();
-    private String fecha_creacion = "";
-    private String nombre_cuestionario = "";
+    private String id;
+    private ArrayList<Preguntas> pregunta = new ArrayList();
+    private String fecha = "";
+    private String nombre = "";
+    private String correo = "";
+    private ArrayList<String> respuestas = new ArrayList();
 
     public Cuestionarios() {
     }
 
-    public Cuestionarios(ArrayList preguntas, String fecha_creacion, String nombre_cuestionario) {
-        this.preguntas = preguntas;
-        this.fecha_creacion = fecha_creacion;
-        this.nombre_cuestionario = nombre_cuestionario;
+    public Cuestionarios(String id, ArrayList<Preguntas> pregunta, String fecha, String nombre, String correo, ArrayList<String> respuestas) {
+        this.id = id;
+        this.pregunta = pregunta;
+        this.fecha = fecha;
+        this.nombre = nombre;
+        this.correo = correo;
+        this.respuestas = respuestas;
     }
 
-    public ArrayList getPreguntas() {
-        return preguntas;
+    public String getId() {
+        return id;
     }
 
-    public void setPreguntas(ArrayList preguntas) {
-        this.preguntas = preguntas;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getFecha_creacion() {
-        return fecha_creacion;
+    public ArrayList<Preguntas> getPregunta() {
+        return pregunta;
     }
 
-    public void setFecha_creacion(String fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
+    public void setPregunta(ArrayList<Preguntas> pregunta) {
+        this.pregunta = pregunta;
     }
 
-    public String getNombre_cuestionario() {
-        return nombre_cuestionario;
+    public String getFecha() {
+        return fecha;
     }
 
-    public void setNombre_cuestionario(String nombre_cuestionario) {
-        this.nombre_cuestionario = nombre_cuestionario;
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public ArrayList<String> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(ArrayList<String> respuestas) {
+        this.respuestas = respuestas;
     }
 
     @Override
     public String toString() {
         return "Cuestionarios{" +
-                "preguntas=" + preguntas +
-                ", fecha_creacion='" + fecha_creacion + '\'' +
-                ", nombre_cuestionario='" + nombre_cuestionario + '\'' +
+                "id='" + id + '\'' +
+                ", pregunta=" + pregunta +
+                ", fecha='" + fecha + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", correo='" + correo + '\'' +
+                ", respuestas=" + respuestas +
                 '}';
     }
 }
