@@ -12,16 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CuestionarioProyecto">
-        <activity android:name=".controller.CuestionarioActivity"></activity>
-        <activity android:name=".controller.AuthActivity" />
-        <activity
-            android:name=".HomeActivity"
-            android:label="@string/title_activity_home">
+        <activity android:name=".controller.RegisterActivity"></activity>
+        <activity android:name=".controller.CuestionarioActivity" />
+        <activity android:name=".controller.AuthActivity" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home">
+
         </activity>
         <activity android:name=".MainActivity" />
     </application>

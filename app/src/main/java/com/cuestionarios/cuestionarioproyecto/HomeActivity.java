@@ -1,8 +1,12 @@
 package com.cuestionarios.cuestionarioproyecto;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
+import com.cuestionarios.cuestionarioproyecto.controller.AuthActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,12 +19,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cuestionarios.cuestionarioproyecto.databinding.ActivityHomeBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
+
+    ImageButton cerrarSesion;
 
     private ActivityHomeBinding binding;
 
@@ -41,9 +48,22 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
+        cerrarSesion=findViewById(R.id.idBtnExit);
+        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesionn();
+            }
+        });
 
 
     }
 
+    private void cerrarSesionn() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intentHome = new Intent(getApplicationContext(), AuthActivity.class);
+        startActivity(intentHome);
+
+    }
 }
