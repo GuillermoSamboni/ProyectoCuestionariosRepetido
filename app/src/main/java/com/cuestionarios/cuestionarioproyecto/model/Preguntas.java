@@ -1,6 +1,7 @@
 package com.cuestionarios.cuestionarioproyecto.model;
 
 public class Preguntas {
+    private String id;
     private String imagen_e;
     private String imagen_m;
     private String contenido;
@@ -15,7 +16,8 @@ public class Preguntas {
     public Preguntas() {
     }
 
-    public Preguntas(String imagen_e, String imagen_m, String contenido, String op1, String op2, String op3, String op4, String respuesta, String tipo, String titulo) {
+    public Preguntas(String id, String imagen_e, String imagen_m, String contenido, String op1, String op2, String op3, String op4, String respuesta, String tipo, String titulo) {
+        this.id = id;
         this.imagen_e = imagen_e;
         this.imagen_m = imagen_m;
         this.contenido = contenido;
@@ -26,6 +28,14 @@ public class Preguntas {
         this.respuesta = respuesta;
         this.tipo = tipo;
         this.titulo = titulo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImagen_e() {
@@ -111,7 +121,8 @@ public class Preguntas {
     @Override
     public String toString() {
         return "Preguntas{" +
-                "imagen_e='" + imagen_e + '\'' +
+                "id='" + id + '\'' +
+                ", imagen_e='" + imagen_e + '\'' +
                 ", imagen_m='" + imagen_m + '\'' +
                 ", contenido='" + contenido + '\'' +
                 ", op1='" + op1 + '\'' +
